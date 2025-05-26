@@ -97,7 +97,7 @@ def analizar_tema():
     if not noticias:
         return jsonify({"error": "No se encontraron noticias"}), 404
 
-    analisis = analizar_con_chatgpt(empresa, pregunta, noticias)
+    analisis = analizar_con_gemini(empresa, pregunta, noticias)
 
     return jsonify({
         "empresa": empresa,
