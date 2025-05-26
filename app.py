@@ -10,27 +10,34 @@ app = Flask(__name__)
 
 def buscar_noticias(tema):
     url = f"https://www.google.com/search?q={tema}+site:bbc.com&tbm=nws"
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119 Safari/537.36'
+    }
     resp = requests.get(url, headers=headers)
     soup = BeautifulSoup(resp.text, 'html.parser')
     noticias = []
 
     for item in soup.select('.dbsr')[:5]:
-        titulo = item.select_one('.nDgy9d').text if item.select_one('.nDgy9d') else 'Sin título'
+        titulo = item.select_one('.nDgy9d')
         enlace = item.a['href']
-        noticias.append({'titulo': titulo, 'enlace': enlace})
+        if titulo:
+            noticias.append({'titulo': titulo.text, 'enlace': enlace})
+
     return noticias
 
-def analizar_con_chatgpt(tema, noticias):
-    contenido = f"Analiza este tema: '{tema}' usando estas noticias:\n"
+def analizar_con_chatgpt(empresa, sector, pregunta, tema, noticias):
+    contenido = f"Tema solicitado: '{tema}'\nEmpresa: {empresa}\nSector: {sector}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
     for noticia in noticias:
         contenido += f"- {noticia['titulo']} ({noticia['enlace']})\n"
 
     prompt = f"""
-Eres un analista experto. Dado el siguiente tema y noticias, responde:
-1. Resumen
-2. Análisis crítico
-3. Palabras clave
+Eres un analista económico. Con base en la empresa, sector, pregunta del usuario y las noticias listadas, responde de forma precisa:
+
+1. 🧠 Resumen del contexto económico
+2. 📈 Cómo puede impactar al sector o empresa
+3. 🧐 Análisis crítico
+4. 🔑 Palabras clave útiles
+5. ✅ Respuesta directa a la pregunta del usuario
 
 {contenido}
 """
@@ -38,7 +45,7 @@ Eres un analista experto. Dado el siguiente tema y noticias, responde:
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "Eres un analista experto en noticias."},
+            {"role": "system", "content": "Eres un analista económico profesional especializado en noticias financieras y políticas."},
             {"role": "user", "content": prompt}
         ],
         temperature=0.7
@@ -47,20 +54,30 @@ Eres un analista experto. Dado el siguiente tema y noticias, responde:
 
 @app.route('/')
 def home():
-    return "✅ API de noticias funcionando."
+    return "✅ API de análisis económico funcionando."
 
 @app.route('/analizar-tema', methods=['POST'])
 def analizar_tema():
     data = request.get_json()
     tema = data.get('tema')
-    if not tema:
-        return jsonify({"error": "Tema no proporcionado"}), 400
+    empresa = data.get('empresa')
+    sector = data.get('sector')
+    pregunta = data.get('pregunta', '')
+
+    if not all([tema, empresa, sector]):
+        return jsonify({"error": "Faltan datos requeridos: tema, empresa o sector"}), 400
 
     noticias = buscar_noticias(tema)
-    analisis = analizar_con_chatgpt(tema, noticias)
-    
+    if not noticias:
+        return jsonify({"error": "No se encontraron noticias"}), 404
+
+    analisis = analizar_con_chatgpt(empresa, sector, pregunta, tema, noticias)
+
     return jsonify({
         "tema": tema,
+        "empresa": empresa,
+        "sector": sector,
+        "pregunta": pregunta,
         "noticias": noticias,
         "analisis": analisis
     })
