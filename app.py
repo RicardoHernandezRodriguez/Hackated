@@ -63,7 +63,7 @@ Eres un analista económico. Con base en la empresa, la pregunta del usuario y l
     print("📝 Prompt generado para OpenAI:")
     print(prompt)
     
-    response = openai.chat.completion.create(
+    response = openai.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": "Eres un analista económico profesional especializado en noticias financieras y políticas."},
