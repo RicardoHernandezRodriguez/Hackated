@@ -1,20 +1,22 @@
 import os
 import requests
-from bs4 import BeautifulSoup
 from flask import Flask, request, jsonify
 import openai
-import requests
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
-def buscar_noticias(sector):
+def buscar_noticias():
     api_key = "a0129cf4cca046dd8801ae0a852815c3"
+
+    query = (
+        "business OR economy OR imports OR exports OR \"Donald Trump\""
+    )
 
     url = (
         f"https://newsapi.org/v2/everything"
-        f"?q={sector}+economy"
+        f"?q={query}"
         f"&language=en"
         f"&sortBy=publishedAt"
         f"&pageSize=5"
@@ -31,20 +33,19 @@ def buscar_noticias(sector):
                 'titulo': articulo['title'],
                 'enlace': articulo['url']
             })
+        print("📰 Noticias encontradas:", len(noticias))
     else:
         print("❌ Error en NewsAPI:", response.status_code, response.text)
-        
-    print("Respuesta completa:", data)
 
     return noticias
 
-def analizar_con_chatgpt(empresa, sector, pregunta, noticias):
-    contenido = f"Empresa: {empresa}\nSector: {sector}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
+def analizar_con_chatgpt(empresa, pregunta, noticias):
+    contenido = f"Empresa: {empresa}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
     for noticia in noticias:
         contenido += f"- {noticia['titulo']} ({noticia['enlace']})\n"
 
     prompt = f"""
-Eres un analista económico. Con base en la empresa, sector, pregunta del usuario y las noticias listadas, responde de forma precisa:
+Eres un analista económico. Con base en la empresa, la pregunta del usuario y las noticias listadas, responde de forma precisa:
 
 1. 🧠 Resumen del contexto económico
 2. 📈 Cómo puede impactar al sector o empresa
@@ -73,23 +74,19 @@ def home():
 def analizar_tema():
     data = request.get_json()
     empresa = data.get('empresa')
-    sector = data.get('sector')
     pregunta = data.get('pregunta', '')
 
-    if not all([empresa, sector]):
-        return jsonify({"error": "Faltan datos requeridos: tema, empresa o sector"}), 400
-        
-    busqueda = f"{sector} economía"
+    if not empresa:
+        return jsonify({"error": "Falta el dato requerido: empresa"}), 400
 
-    noticias = buscar_noticias(busqueda)
+    noticias = buscar_noticias()
     if not noticias:
         return jsonify({"error": "No se encontraron noticias"}), 404
 
-    analisis = analizar_con_chatgpt(empresa, sector, pregunta, noticias)
+    analisis = analizar_con_chatgpt(empresa, pregunta, noticias)
 
     return jsonify({
         "empresa": empresa,
-        "sector": sector,
         "pregunta": pregunta,
         "noticias": noticias,
         "analisis": analisis
