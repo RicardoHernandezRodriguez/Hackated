@@ -25,8 +25,8 @@ def buscar_noticias(sector):
 
     return noticias
 
-def analizar_con_chatgpt(empresa, sector, pregunta, tema, noticias):
-    contenido = f"Tema solicitado: '{tema}'\nEmpresa: {empresa}\nSector: {sector}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
+def analizar_con_chatgpt(empresa, sector, pregunta, noticias):
+    contenido = f"Empresa: {empresa}\nSector: {sector}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
     for noticia in noticias:
         contenido += f"- {noticia['titulo']} ({noticia['enlace']})\n"
 
@@ -66,16 +66,15 @@ def analizar_tema():
     if not all([empresa, sector]):
         return jsonify({"error": "Faltan datos requeridos: tema, empresa o sector"}), 400
         
-     busqueda = f"{sector} economía"
+    busqueda = f"{sector} economía"
 
     noticias = buscar_noticias(busqueda)
     if not noticias:
         return jsonify({"error": "No se encontraron noticias"}), 404
 
-    analisis = analizar_con_chatgpt(empresa, sector, pregunta, tema, noticias)
+    analisis = analizar_con_chatgpt(empresa, sector, pregunta, noticias)
 
     return jsonify({
-        "tema": tema,
         "empresa": empresa,
         "sector": sector,
         "pregunta": pregunta,
