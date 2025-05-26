@@ -8,7 +8,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
-def buscar_noticias(tema):
+def buscar_noticias(sector):
     url = f"https://www.google.com/search?q={sector}+economía+site:bbc.com&tbm=nws"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119 Safari/537.36'
