@@ -3,25 +3,36 @@ import requests
 from bs4 import BeautifulSoup
 from flask import Flask, request, jsonify
 import openai
+import requests
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
 def buscar_noticias(sector):
-    url = f"https://www.google.com/search?q={sector}+economía+site:bbc.com&tbm=nws"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119 Safari/537.36'
-    }
-    resp = requests.get(url, headers=headers)
-    soup = BeautifulSoup(resp.text, 'html.parser')
+    api_key = "a0129cf4cca046dd8801ae0a852815c3"
+
+    url = (
+        f"https://newsapi.org/v2/everything"
+        f"?q={sector}+economía"
+        f"&language=en"
+        f"&sortBy=publishedAt"
+        f"&pageSize=5"
+        f"&apiKey={api_key}"
+    )
+
+    response = requests.get(url)
     noticias = []
 
-    for item in soup.select('.dbsr')[:5]:
-        titulo = item.select_one('.nDgy9d')
-        enlace = item.a['href']
-        if titulo:
-            noticias.append({'titulo': titulo.text, 'enlace': enlace})
+    if response.status_code == 200:
+        data = response.json()
+        for articulo in data.get("articles", []):
+            noticias.append({
+                'titulo': articulo['title'],
+                'enlace': articulo['url']
+            })
+    else:
+        print("❌ Error en NewsAPI:", response.status_code, response.text)
 
     return noticias
 
@@ -36,7 +47,7 @@ Eres un analista económico. Con base en la empresa, sector, pregunta del usuari
 1. 🧠 Resumen del contexto económico
 2. 📈 Cómo puede impactar al sector o empresa
 3. 🧐 Análisis crítico
-4. 🔑 Palabras clave útiles
+4. 🔑 Palabras clave útiles (en español)
 5. ✅ Respuesta directa a la pregunta del usuario
 
 {contenido}
@@ -83,4 +94,4 @@ def analizar_tema():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5050)
