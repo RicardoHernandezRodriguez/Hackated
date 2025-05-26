@@ -14,7 +14,7 @@ def buscar_noticias(sector):
 
     url = (
         f"https://newsapi.org/v2/everything"
-        f"?q={sector}+economía"
+        f"?q={sector}+economy"
         f"&language=en"
         f"&sortBy=publishedAt"
         f"&pageSize=5"
@@ -33,6 +33,8 @@ def buscar_noticias(sector):
             })
     else:
         print("❌ Error en NewsAPI:", response.status_code, response.text)
+        
+    print("Respuesta completa:", data)
 
     return noticias
 
