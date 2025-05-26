@@ -9,7 +9,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 app = Flask(__name__)
 
 def buscar_noticias(tema):
-    url = f"https://www.google.com/search?q={tema}+site:bbc.com&tbm=nws"
+    url = f"https://www.google.com/search?q={sector}+economía+site:bbc.com&tbm=nws"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119 Safari/537.36'
     }
@@ -59,15 +59,16 @@ def home():
 @app.route('/analizar-tema', methods=['POST'])
 def analizar_tema():
     data = request.get_json()
-    tema = data.get('tema')
     empresa = data.get('empresa')
     sector = data.get('sector')
     pregunta = data.get('pregunta', '')
 
-    if not all([tema, empresa, sector]):
+    if not all([empresa, sector]):
         return jsonify({"error": "Faltan datos requeridos: tema, empresa o sector"}), 400
+        
+     busqueda = f"{sector} economía"
 
-    noticias = buscar_noticias(tema)
+    noticias = buscar_noticias(busqueda)
     if not noticias:
         return jsonify({"error": "No se encontraron noticias"}), 404
 
