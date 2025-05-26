@@ -1,9 +1,9 @@
 import os
 import requests
 from flask import Flask, request, jsonify
-import openai
+import google.generativeai as genai
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = Flask(__name__)
 
@@ -44,11 +44,15 @@ def buscar_noticias():
 
     return noticias
 
-def analizar_con_chatgpt(empresa, pregunta, noticias):
+def analizar_con_gemini(empresa, pregunta, noticias): # Renombramos la función
+    # Instancia el modelo de Gemini. 'gemini-pro' es un buen punto de partida para texto.
+    model = genai.GenerativeModel('gemini-pro')
+
     contenido = f"Empresa: {empresa}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
     for noticia in noticias:
         contenido += f"- {noticia['titulo']} ({noticia['enlace']})\n"
 
+    # El prompt para Gemini es similar, pero no necesitas la estructura de "messages" de OpenAI
     prompt = f"""
 Eres un analista económico. Con base en la empresa, la pregunta del usuario y las noticias listadas, responde de forma precisa:
 
@@ -60,25 +64,23 @@ Eres un analista económico. Con base en la empresa, la pregunta del usuario y l
 
 {contenido}
 """
-    print("📝 Prompt generado para OpenAI:")
+    print("📝 Prompt generado para Gemini:")
     print(prompt)
-    
-    response = openai.chat.completions.create(
-        model="gpt-o4-mini",
-        messages=[
-            {"role": "system", "content": "Eres un analista económico profesional especializado en noticias financieras y políticas."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.7
-    )
-    print("✅ Respuesta de OpenAI:", response)
-    return response.choices[0].message["content"]
 
+    try:
+        # Llama a la API de Gemini
+        response = model.generate_content(prompt)
+        print("✅ Respuesta de Gemini:", response)
+        # Accede al texto de la respuesta
+        return response.text
+    except Exception as e:
+        print(f"❌ Error al llamar a la API de Gemini: {e}")
+        return f"Error al realizar el análisis: {e}"
 
 
 @app.route('/')
 def home():
-    return "✅ API de análisis económico funcionando."
+    return "✅ API de análisis económico funcionando con Gemini."
 
 @app.route('/analizar-tema', methods=['POST'])
 def analizar_tema():
@@ -105,4 +107,4 @@ def analizar_tema():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
