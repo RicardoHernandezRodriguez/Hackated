@@ -23,11 +23,16 @@ def buscar_noticias():
         f"&apiKey={api_key}"
     )
 
+    print("🔗 URL de NewsAPI:", url)
+
     response = requests.get(url)
     noticias = []
 
+    print("🔄 Código de respuesta NewsAPI:", response.status_code)
+
     if response.status_code == 200:
         data = response.json()
+        print("📰 Noticias encontradas:", data)
         for articulo in data.get("articles", []):
             noticias.append({
                 'titulo': articulo['title'],
@@ -55,7 +60,9 @@ Eres un analista económico. Con base en la empresa, la pregunta del usuario y l
 
 {contenido}
 """
-
+    print("📝 Prompt generado para OpenAI:")
+    print(prompt)
+    
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
@@ -64,7 +71,10 @@ Eres un analista económico. Con base en la empresa, la pregunta del usuario y l
         ],
         temperature=0.7
     )
+    print("✅ Respuesta de OpenAI:", response)
     return response.choices[0].message["content"]
+
+
 
 @app.route('/')
 def home():
@@ -73,6 +83,7 @@ def home():
 @app.route('/analizar-tema', methods=['POST'])
 def analizar_tema():
     data = request.get_json()
+    print("📥 Datos recibidos:", data)
     empresa = data.get('empresa')
     pregunta = data.get('pregunta', '')
 
@@ -80,6 +91,7 @@ def analizar_tema():
         return jsonify({"error": "Falta el dato requerido: empresa"}), 400
 
     noticias = buscar_noticias()
+    print("📊 Noticias obtenidas:", noticias)
     if not noticias:
         return jsonify({"error": "No se encontraron noticias"}), 404
 
@@ -93,4 +105,4 @@ def analizar_tema():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050)
+    app.run(host='0.0.0.0', port=5050, debug=true)
