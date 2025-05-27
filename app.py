@@ -11,10 +11,8 @@ def buscar_noticias():
     api_key = "a0129cf4cca046dd8801ae0a852815c3"
 
     query = (
-        
         "business OR politics OR economy OR imports OR exports OR \"Donald Trump\""
-            
-    )"
+    )
 
     url = (
         f"https://newsapi.org/v2/everything"
