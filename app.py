@@ -47,7 +47,7 @@ def buscar_noticias():
         for articulo in data.get("articles", []):
             noticias.append({
                 'titulo': articulo['title'],
-                'enlace': articulo['url']
+                'enlace': articulo['url'],
                 'descripcion': articulo.get('description', '')
             })
         print("📰 Noticias encontradas:", len(noticias))
