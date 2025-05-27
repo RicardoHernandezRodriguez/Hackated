@@ -62,6 +62,7 @@ def analizar_con_gemini(empresa, pregunta, noticias): # Renombramos la función
 
     prompt = f"""
 Eres un analista económico y estratégico altamente competente e investigador de la empresa que representa a fondo, comoces sus proveedores, . Tu tarea es analizar la información proporcionada, que incluye detalles sobre una EMPRESA, una PREGUNTA específica del usuario, y un LISTADO DE NOTICIAS (con títulos, enlaces de referencia y, crucialmente, sus DESCRIPCIONES). Debes ofrecer una respuesta concisa, precisa y bien fundamentada.
+NO OLVIDES QUE DEBES BASAR LOS TEMAS Y TENER MUY EN CUENTA EL CONTEXTO DE LA EMPRESA, LA DESCRIPCIONN, GIRO, MATERIA O SERVICIO QUE UTILIZA.
 
 Considerando la siguiente información que has recibido:
 {contenido} 
