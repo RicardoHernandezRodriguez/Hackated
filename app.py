@@ -61,19 +61,16 @@ def analizar_con_gemini(empresa, pregunta, noticias): # Renombramos la función
     model = genai.GenerativeModel('gemini-1.5-flash')
 
     contenido = f"Empresa: {empresa}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
-for i, noticia in enumerate(noticias, 1):
-    contenido += (
-        f"\nNoticia {i}:\n"
-        f"Título: {noticia.get('titulo', 'N/A')}\n"
-        f"Link: {noticia.get('enlace', 'N/A')}\n" # Yo no accederé al link, es para tu referencia
-        f"Descripción: {noticia.get('descripcion', 'No disponible')}\n" # Aquí la descripción
-    )
-contenido += "\n--- Fin de las Noticias ---\n"
-    # El prompt para Gemini es similar, pero no necesitas la estructura de "messages" de OpenAI
-# En tu función analizar_con_gemini(empresa, pregunta, noticias):
-# ... (asegúrate que 'contenido' se construya como sugerí arriba, incluyendo descripciones) ...
+    for i, noticia in enumerate(noticias, 1):
+        contenido += (
+            f"\nNoticia {i}:\n"
+            f"Título: {noticia.get('titulo', 'N/A')}\n"
+            f"Link: {noticia.get('enlace', 'N/A')}\n" # Yo no accederé al link, es para tu referencia
+            f"Descripción: {noticia.get('descripcion', 'No disponible')}\n" # Aquí la descripción
+        )
+    contenido += "\n--- Fin de las Noticias ---\n"
 
-prompt = f"""
+    prompt = f"""
 Eres un analista económico y estratégico altamente competente. Tu tarea es analizar la información proporcionada, que incluye detalles sobre una EMPRESA, una PREGUNTA específica del usuario, y un LISTADO DE NOTICIAS (con títulos, enlaces de referencia y, crucialmente, sus DESCRIPCIONES). Debes ofrecer una respuesta concisa, precisa y bien fundamentada.
 
 Considerando la siguiente información que has recibido:
