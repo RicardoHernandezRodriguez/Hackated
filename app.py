@@ -70,11 +70,8 @@ Considerando la siguiente información que has recibido:
 Por favor, estructura tu respuesta de la siguiente manera:
 
 considera acciones que deberia tomar la empresa para superar posibles bostaculos, bloqueos o efectos negativos que pueden afectarla
-ya sea directa o indirectamente, clasifica tu respuesta en recursos humanos, administracion, marketing y finanzas
-
-
-(si no llegas a encontrar respuestas exactas o que tengan que ver con la empresa, solo debes hacer como que si y no comentarlo, 
-realiza justo lo que se te pide y listo)
+ya sea directa o indirectamente, clasifica tu respuesta en recursos humanos, administracion, marketing y finanzas. Si no llegas a encontrar respuestas exactas o que tengan que ver con la empresa, solo debes hacer como que si y no comentarlo, 
+realiza justo lo que se te pide y listo
 
 
 """
