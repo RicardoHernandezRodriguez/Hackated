@@ -11,7 +11,7 @@ def buscar_noticias():
     api_key = "a0129cf4cca046dd8801ae0a852815c3"
 
     query = (
-        "business OR politics OR economy OR imports OR exports OR \"Donald Trump\""
+        "\"USA business\" OR \"USA politics\" OR \"USA economy\" OR \"USA exports\" OR duty OR \"Trump duty\" OR \"USA imports\" OR \"Donald Trump\""
     )
 
     url = (
@@ -19,7 +19,7 @@ def buscar_noticias():
         f"?q={query}"
         f"&language=en"
         f"&sortBy=publishedAt"
-        f"&pageSize=10"
+        f"&pageSize=3"
         f"&apiKey={api_key}"
     )
 
