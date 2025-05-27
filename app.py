@@ -73,7 +73,7 @@ contenido += "\n--- Fin de las Noticias ---\n"
 # En tu función analizar_con_gemini(empresa, pregunta, noticias):
 # ... (asegúrate que 'contenido' se construya como sugerí arriba, incluyendo descripciones) ...
 
-    prompt = f"""
+prompt = f"""
 Eres un analista económico y estratégico altamente competente. Tu tarea es analizar la información proporcionada, que incluye detalles sobre una EMPRESA, una PREGUNTA específica del usuario, y un LISTADO DE NOTICIAS (con títulos, enlaces de referencia y, crucialmente, sus DESCRIPCIONES). Debes ofrecer una respuesta concisa, precisa y bien fundamentada.
 
 Considerando la siguiente información que has recibido:
