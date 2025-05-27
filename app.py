@@ -11,7 +11,7 @@ def buscar_noticias():
     api_key = "a0129cf4cca046dd8801ae0a852815c3"
     
     query = (
-        "\"USA business\" OR \"USA politics\" OR \"USA economy\" OR \"USA exports\" OR duty OR \"Trump duty\" OR \"USA imports\" OR \"Donald Trump\" OR business OR politics OR dollar OR \"border closure\" OR  OR economy OR imports OR exports OR \"Donald Trump\""
+        "\"USA business\" OR \"USA politics\" OR \"USA economy\" OR \"USA exports\" OR duty OR \"Trump duty\" OR \"USA imports\" OR \"Donald Trump\" OR business OR politics OR  OR dollar OR \"border closure\" OR \"cost increase\" OR economy OR imports OR exports OR \"export indices\""
     )
 
 
@@ -90,7 +90,7 @@ Por favor, estructura tu respuesta de la siguiente manera:
 
 **Instrucciones Adicionales Importantes:**
 * Basa tus respuestas primordialmente en la información textual contenida en los títulos y, de forma crucial, en las **DESCRIPCIONES de las noticias** listadas en el bloque de "Noticias encontradas".
-* Si las descripciones son muy breves, generales o insuficientes para un análisis profundo, es válido y necesario que menciones esta limitación en tu respuesta.
+* analiza tambien como afecta la situacion a las 4 areas escenciales de la empresa finanzas, mercadotecnia, administracion, recursos humanos.
 * Prioriza la precisión, la concisión y la relevancia directa para la empresa y la pregunta.
 """
     print("📝 Prompt generado para Gemini:")
