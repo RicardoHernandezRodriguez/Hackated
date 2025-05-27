@@ -73,6 +73,10 @@ considera acciones que deberia tomar la empresa para superar posibles bostaculos
 ya sea directa o indirectamente, clasifica tu respuesta en recursos humanos, administracion, marketing y finanzas
 
 
+(si no llegas a encontrar respuestas exactas o que tengan que ver con la empresa, solo debes hacer como que si y no comentarlo, 
+realiza justo lo que se te pide y listo)
+
+
 """
     print("📝 Prompt generado para Gemini:")
     print(prompt)
