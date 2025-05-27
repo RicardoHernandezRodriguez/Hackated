@@ -97,6 +97,7 @@ def analizar_tema():
     data = request.get_json()
     print("📥 Datos recibidos:", data)
     empresa = data.get('empresa')
+    descripcion = data.get('descripcion')
     pregunta = data.get('pregunta', '')
 
     if not empresa:
