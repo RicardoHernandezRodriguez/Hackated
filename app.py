@@ -45,7 +45,7 @@ def buscar_noticias():
 
     return noticias
 
-def analizar_con_gemini(empresa, pregunta, noticias): # Renombramos la función
+def analizar_con_gemini(empresa, descripcion, pregunta, noticias): # Renombramos la función
     # Instancia el modelo de Gemini. 'gemini-pro' es un buen punto de partida para texto.
     model = genai.GenerativeModel('gemini-1.5-flash')
 
