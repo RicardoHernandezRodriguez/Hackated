@@ -10,42 +10,17 @@ app = Flask(__name__)
 def buscar_noticias():
     api_key = "a0129cf4cca046dd8801ae0a852815c3"
 
-    query = (
-    # Grupo 1: Economía General
-    "\"US economy\" OR \"US economic outlook\" OR \"US GDP\" OR "
-    
-    # Grupo 2: Política Comercial
-    "\"US trade policy\" OR USMCA OR tariffs OR \"US customs\" OR "
-    
-    # Grupo 3: Cadena de Suministro
-    "\"US supply chain\" OR \"logistics disruptions US\" OR \"port congestion US\" OR "
-    
-    # Grupo 4: Manufactura
-    "\"US manufacturing sector\" OR \"US industrial production\" OR \"factory orders US\" OR "
-    
-    # Grupo 5: Automotriz
-    "\"US automotive industry\" OR \"US auto sales\" OR \"electric vehicles US\" OR "
-    
-    # Grupo 6: Agroindustria y Alimentos
-    "\"US agricultural policy\" OR \"US food prices\" OR \"FDA food regulation\" OR "
-    
-    # Grupo 7: Energía
-    "\"US energy prices\" OR \"US oil and gas\" OR \"US renewable energy policy\" OR "
-    
-    # Grupo 8: Mercado Laboral
-    "\"US labor market\" OR \"US employment report\" OR \"wage growth US\" OR "
-    
-    # Grupo 9: Política Monetaria e Inflación
-    "\"Federal Reserve\" OR \"US inflation report\" OR \"US interest rates\" OR "
-    
-    # Grupo 10: Nearshoring e Inversión
-    "nearshoring OR friendshoring OR \"US investment Mexico\" OR \"Mexico sourcing\" OR "
-    
-    # Grupo 11: Regulación Ambiental
-    "\"US environmental regulation\" OR \"EPA ruling\" OR \"industrial emissions US\" OR "
-    
-    # Grupo 12: Tecnología
-    "\"US technology trends\" OR \"AI in US industry\" OR \"semiconductor US\""
+    query = ("\"US economy\" OR \"US economic outlook\" 
+    OR \"US GDP\" OR \"US trade policy\" OR USMCA OR tariffs 
+    OR \"US customs\" OR \"US supply chain\" OR \"logistics disruptions US\" 
+    OR \"port congestion US\" OR \"US manufacturing sector\" 
+    OR \"US industrial production\" OR \"factory orders US\" OR \"US automotive industry\" 
+    OR \"US auto sales\" OR \"electric vehicles US\" OR \"US agricultural policy\" OR \"US food prices\" 
+    OR \"FDA food regulation\" OR \"US energy prices\" OR \"US oil and gas\" OR \"US renewable energy policy\" 
+    OR \"US labor market\" OR \"US employment report\" OR \"wage growth US\" OR \"Federal Reserve\" OR \"US inflation report\" 
+    OR \"US interest rates\" OR nearshoring OR friendshoring OR \"US investment Mexico\" OR \"Mexico sourcing\" 
+    OR \"US environmental regulation\" OR \"EPA ruling\" OR \"industrial emissions US\" OR \"US technology trends\" 
+    OR \"AI in US industry\" OR \"semiconductor US\""
     )
 
     url = (
