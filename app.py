@@ -48,6 +48,7 @@ def buscar_noticias():
             noticias.append({
                 'titulo': articulo['title'],
                 'enlace': articulo['url']
+                'descripcion': articulo.get('description', '')
             })
         print("📰 Noticias encontradas:", len(noticias))
     else:
@@ -60,20 +61,50 @@ def analizar_con_gemini(empresa, pregunta, noticias): # Renombramos la función
     model = genai.GenerativeModel('gemini-1.5-flash')
 
     contenido = f"Empresa: {empresa}\nPregunta del usuario: {pregunta}\n\nNoticias encontradas:\n"
-    for noticia in noticias:
-        contenido += f"- {noticia['titulo']} ({noticia['enlace']})\n"
-
+for i, noticia in enumerate(noticias, 1):
+    contenido += (
+        f"\nNoticia {i}:\n"
+        f"Título: {noticia.get('titulo', 'N/A')}\n"
+        f"Link: {noticia.get('enlace', 'N/A')}\n" # Yo no accederé al link, es para tu referencia
+        f"Descripción: {noticia.get('descripcion', 'No disponible')}\n" # Aquí la descripción
+    )
+contenido += "\n--- Fin de las Noticias ---\n"
     # El prompt para Gemini es similar, pero no necesitas la estructura de "messages" de OpenAI
+# En tu función analizar_con_gemini(empresa, pregunta, noticias):
+# ... (asegúrate que 'contenido' se construya como sugerí arriba, incluyendo descripciones) ...
+
     prompt = f"""
-Eres un analista económico. Con base en la empresa, la pregunta del usuario y las noticias listadas, responde de forma precisa:
+Eres un analista económico y estratégico altamente competente. Tu tarea es analizar la información proporcionada, que incluye detalles sobre una EMPRESA, una PREGUNTA específica del usuario, y un LISTADO DE NOTICIAS (con títulos, enlaces de referencia y, crucialmente, sus DESCRIPCIONES). Debes ofrecer una respuesta concisa, precisa y bien fundamentada.
 
-1. 🧠 Resumen del contexto económico
-2. 📈 Cómo puede impactar al sector o empresa
-3. 🧐 Análisis crítico
-4. 🔑 Palabras clave útiles (en español)
-5. ✅ Respuesta directa a la pregunta del usuario
+Considerando la siguiente información que has recibido:
+{contenido} 
+# El bloque anterior ({contenido}) ya incluye la "Empresa:", la "Pregunta del usuario:" y el listado de "Noticias encontradas:" con sus títulos, links y descripciones.
 
-{contenido}
+Por favor, estructura tu respuesta de la siguiente manera:
+
+1.  🧠 **Resumen del Contexto Económico Clave (basado en las DESCripciones de las noticias):**
+    * Identifica y resume brevemente (2-3 puntos) las tendencias o eventos económicos más relevantes presentes en las **descripciones** de las noticias proporcionadas que se relacionan directamente con la EMPRESA y la PREGUNTA del usuario.
+
+2.  📈 **Impacto Potencial Específico (en la Empresa y en relación a la Pregunta):**
+    * Describe cómo el contexto económico identificado podría impactar específicamente a la EMPRESA mencionada.
+    * Enlaza este impacto directamente con la PREGUNTA formulada por el usuario.
+    * Sé específico sobre los posibles efectos (positivos/negativos).
+    * Reconoce explícitamente que tu análisis se basa en la información limitada de los títulos y, sobre todo, las **descripciones** de las noticias.
+
+3.  🧐 **Análisis Crítico Breve y Perspectiva:**
+    * Desde una perspectiva crítica, ¿cuáles son las principales OPORTUNIDADES o los RIESGOS más evidentes para la EMPRESA en el contexto de la PREGUNTA y las noticias analizadas?
+    * Ofrece una breve perspectiva (ej. cautelosa, optimista con reservas, desafiante).
+
+4.  🔑 **Palabras Clave Útiles (en español):**
+    * Lista 3-5 palabras clave concisas en español que sinteticen los hallazgos más importantes de tu análisis.
+
+5.  ✅ **Respuesta Directa y Accionable a la Pregunta del Usuario:**
+    * Proporciona una respuesta clara, directa y, si es posible, accionable a la PREGUNTA del usuario, integrando los hallazgos de tu análisis (puntos 1, 2 y 3).
+
+**Instrucciones Adicionales Importantes:**
+* Basa tus respuestas primordialmente en la información textual contenida en los títulos y, de forma crucial, en las **DESCRIPCIONES de las noticias** listadas en el bloque de "Noticias encontradas".
+* Si las descripciones son muy breves, generales o insuficientes para un análisis profundo, es válido y necesario que menciones esta limitación en tu respuesta.
+* Prioriza la precisión, la concisión y la relevancia directa para la empresa y la pregunta.
 """
     print("📝 Prompt generado para Gemini:")
     print(prompt)
